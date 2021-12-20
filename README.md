@@ -1,7 +1,7 @@
-# Wilbur Soot Discord Ban Appeals 
+# WilburSoot Discord Ban Appeals Form
 [![Netlify Status](https://api.netlify.com/api/v1/badges/af99b515-955a-47a3-964a-6076c444b2d1/deploy-status)](https://app.netlify.com/sites/hardcore-kalam-a47bd1/deploys)
 
-A form app that allows banned users to appeal their bans from Wilbur Soot's Discord in an honest way. This form app integrates with Sootbot and uses Discord OAuth2 to ensure that users cannot create forged, faked or troll appeals.
+A form app that allows banned users to appeal their bans from WilburSoot's Discord in an honest way. This form app integrates with Sootbot and uses Discord OAuth2 to ensure that users cannot create forged, faked or troll appeals.
 
 Forked from [sylveon/discord-ban-appeals](https://github.com/sylveon/discord-ban-appeals).
 
