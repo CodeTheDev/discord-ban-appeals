@@ -18,16 +18,18 @@ export async function handler(event, context) {
 
         const params = new URLSearchParams(event.body);
         payload = {
+            age: params.get("age") || undefined,
             banReason: params.get("banReason") || undefined,
+            moderator: params.get("moderator") || undefined,
             appealText: params.get("appealText") || undefined,
-            futureActions: params.get("futureActions") || undefined,
             token: params.get("token") || undefined
         };
     }
 
-    if (payload.banReason !== undefined &&
+    if (payload.age !== undefined &&
+        payload.banReason !== undefined &&
+        payload.moderator !== undefined &&
         payload.appealText !== undefined &&
-        payload.futureActions !== undefined && 
         payload.token !== undefined) {
         
         const userInfo = decodeJwt(payload.token);
@@ -35,31 +37,40 @@ export async function handler(event, context) {
             return {
                 statusCode: 303,
                 headers: {
-                    "Location": `/error?msg=${encodeURIComponent("You cannot submit ban appeals with this Discord account.")}`,
+                    "Location": `/error?msg=${encodeURIComponent("Error!\n\nYou have been blocked from using the appeals form.")}`,
                 },
             };
         }
         
         const message = {
             embed: {
-                title: "New appeal submitted!",
+                title: `Ban Appeal: ${userInfo.username}#${userInfo.discriminator}`,
                 timestamp: new Date().toISOString(),
+                color: 0xffff55,
                 fields: [
                     {
-                        name: "Submitter",
-                        value: `<@${userInfo.id}> (${userInfo.username}#${userInfo.discriminator})`
+                        name: "What is your username?",
+                        value: `<@${userInfo.id}> (\`${userInfo.username}#${userInfo.discriminator}\`)`
                     },
                     {
-                        name: "Why were you banned?",
+                        name: "What is your email address?",
+                        value: `\`${userInfo.email}\``
+                    },
+                    {
+                        name: "What is your age?",
+                        value: payload.age.slice(0, MAX_EMBED_FIELD_CHARS)
+                    },
+                    {
+                        name: "Why were you banned? (Write \"Not Sure\" if you're unsure or don't know.)",
                         value: payload.banReason.slice(0, MAX_EMBED_FIELD_CHARS)
                     },
                     {
-                        name: "Why do you feel you should be unbanned?",
-                        value: payload.appealText.slice(0, MAX_EMBED_FIELD_CHARS)
+                        name: "Which moderator banned you? (Example: CodeError#0001)",
+                        value: payload.moderator.slice(0, MAX_EMBED_FIELD_CHARS)
                     },
                     {
-                        name: "What will you do to avoid being banned in the future?",
-                        value: payload.futureActions.slice(0, MAX_EMBED_FIELD_CHARS)
+                        name: "In your own words, why should you be unbanned?",
+                        value: payload.appealText.slice(0, MAX_EMBED_FIELD_CHARS)
                     }
                 ]
             }
@@ -70,7 +81,7 @@ export async function handler(event, context) {
                 const ban = await getBan(userInfo.id, process.env.GUILD_ID, process.env.DISCORD_BOT_TOKEN);
                 if (ban !== null && ban.reason) {
                     message.embed.footer = {
-                        text: `Original ban reason: ${ban.reason}`.slice(0, MAX_EMBED_FOOTER_CHARS)
+                        text: `Ban Reason: ${ban.reason}`.slice(0, MAX_EMBED_FOOTER_CHARS)
                     };
                 }
             } catch (e) {
@@ -85,12 +96,21 @@ export async function handler(event, context) {
     
                 message.components = [{
                     type: 1,
-                    components: [{
-                        type: 2,
-                        style: 5,
-                        label: "Approve appeal and unban user",
-                        url: `${unbanUrl.toString()}?token=${encodeURIComponent(createJwt(unbanInfo))}`
-                    }]
+                    components: [
+                        {
+                            type: 2,
+                            style: 5,
+                            label: "Approve Appeal",
+                            url: `${unbanUrl.toString()}?token=${encodeURIComponent(createJwt(unbanInfo))}`
+                        },
+                        {
+                            type: 2,
+                            style: 4,
+                            label: "Deny Appeal",
+                            custom_id: "deny_appeal",
+                            disabled: true // TODO: This button does not work. Need to do some interactions voodoo.
+                        }
+                    ]
                 }];
             }
         }
