@@ -20,7 +20,6 @@ export async function handler(event, context) {
         payload = {
             age: params.get("age") || undefined,
             banReason: params.get("banReason") || undefined,
-            moderator: params.get("moderator") || undefined,
             appealText: params.get("appealText") || undefined,
             token: params.get("token") || undefined
         };
@@ -28,7 +27,6 @@ export async function handler(event, context) {
 
     if (payload.age !== undefined &&
         payload.banReason !== undefined &&
-        payload.moderator !== undefined &&
         payload.appealText !== undefined &&
         payload.token !== undefined) {
         
@@ -61,12 +59,8 @@ export async function handler(event, context) {
                         value: payload.age.slice(0, MAX_EMBED_FIELD_CHARS)
                     },
                     {
-                        name: "Why were you banned? (Write \"Not Sure\" if you're unsure or don't know.)",
+                        name: "Why were you banned?",
                         value: payload.banReason.slice(0, MAX_EMBED_FIELD_CHARS)
-                    },
-                    {
-                        name: "Which moderator banned you? (Example: CodeError#0001)",
-                        value: payload.moderator.slice(0, MAX_EMBED_FIELD_CHARS)
                     },
                     {
                         name: "In your own words, why should you be unbanned?",
