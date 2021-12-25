@@ -48,7 +48,11 @@ export async function handler(event, context) {
                 fields: [
                     {
                         name: "What is your username?",
-                        value: `<@${userInfo.id}> (\`${userInfo.username}#${userInfo.discriminator}\`)`
+                        value: `\`${userInfo.username}#${userInfo.discriminator}\``
+                    },
+                    {
+                        name: "What is your user ID?",
+                        value: `\`${userInfo.id}\``
                     },
                     {
                         name: "What is your email address?",
@@ -71,17 +75,6 @@ export async function handler(event, context) {
         }
 
         if (process.env.GUILD_ID) {
-            try {
-                const ban = await getBan(userInfo.id, process.env.GUILD_ID, process.env.DISCORD_BOT_TOKEN);
-                if (ban !== null && ban.reason) {
-                    message.embed.footer = {
-                        text: `Ban Reason: ${ban.reason}`.slice(0, MAX_EMBED_FOOTER_CHARS)
-                    };
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
             if (!process.env.DISABLE_UNBAN_LINK) {
                 const unbanUrl = new URL("/.netlify/functions/unban", DEPLOY_PRIME_URL);
                 const unbanInfo = {
