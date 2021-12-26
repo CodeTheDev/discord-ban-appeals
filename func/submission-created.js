@@ -42,7 +42,7 @@ export async function handler(event, context) {
         
         const message = {
             embed: {
-                title: `Ban Appeal: ${userInfo.username}#${userInfo.discriminator}`,
+                title: `[PENDING] Ban Appeal  -  ${userInfo.username}#${userInfo.discriminator}`,
                 timestamp: new Date().toISOString(),
                 color: 0xffff55,
                 fields: [
@@ -84,18 +84,23 @@ export async function handler(event, context) {
                 message.components = [{
                     type: 1,
                     components: [
-                        {
+                        /*{
                             type: 2,
                             style: 5,
                             label: "Approve Appeal",
                             url: `${unbanUrl.toString()}?token=${encodeURIComponent(createJwt(unbanInfo))}`
+                        },*/
+                        {
+                            type: 2,
+                            style: 2,
+                            label: "Approve Appeal",
+                            custom_id: "appeal_accept"
                         },
                         {
                             type: 2,
                             style: 4,
                             label: "Deny Appeal",
-                            custom_id: "deny_appeal",
-                            disabled: true // TODO: This button does not work. Need to do some interactions voodoo.
+                            custom_id: "appeal_deny",
                         }
                     ]
                 }];
