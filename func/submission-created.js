@@ -93,13 +93,13 @@ export async function handler(event, context) {
                         {
                             type: 2,
                             style: 3,
-                            label: "Approve Appeal",
-                            custom_id: "appeal_accept"
+                            label: "Approve",
+                            custom_id: "appeal_approve"
                         },
                         {
                             type: 2,
                             style: 4,
-                            label: "Deny Appeal",
+                            label: "Deny",
                             custom_id: "appeal_deny",
                         }
                     ]
