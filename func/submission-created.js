@@ -92,7 +92,7 @@ export async function handler(event, context) {
                         },*/
                         {
                             type: 2,
-                            style: 2,
+                            style: 3,
                             label: "Approve Appeal",
                             custom_id: "appeal_accept"
                         },
