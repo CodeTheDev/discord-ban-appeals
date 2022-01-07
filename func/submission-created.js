@@ -94,13 +94,22 @@ export async function handler(event, context) {
                             type: 2,
                             style: 3,
                             label: "Approve",
-                            custom_id: "appeal_approve"
+                            custom_id: "appeal_approve",
+                            disabled: true
                         },
                         {
                             type: 2,
                             style: 4,
                             label: "Deny",
                             custom_id: "appeal_deny",
+                            disabled: true
+                        },
+                        {
+                            type: 2,
+                            style: 1,
+                            label: "Claim",
+                            custom_id: "appeal_claim",
+                            disabled: false
                         }
                     ]
                 }];
